@@ -7,11 +7,12 @@ type BaseLayoutProps = {
 };
 
 const Layout: FC<BaseLayoutProps> = ({ children }) => {
-//   const { sidebarToggle } = useContext(SidebarContext);
+  //   const { sidebarToggle } = useContext(SidebarContext);
   return (
-    <div className="mb-40">
+    <div>
       <HeaderNavbar />
-      </div>
+      <div className="">{children}</div>
+    </div>
   );
 };
 
