@@ -18,14 +18,14 @@ function classNames(...classes: any[]) {
 
 export default function HeaderNavbar() {
   return (
-    <div className="bg-white">
+    <div className="bg-white z-50">
       <header className="relative bg-white">
         <nav aria-label="Top" className="mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="border-b border-gray-200 px-4 pb-14 sm:px-0 sm:pb-0">
             <div className="flex h-16 items-center justify-between">
               {/* Logo */}
               <div className="flex flex-1">
-                <a href="#">
+                <a href="/">
                   <span className="sr-only">Your Company</span>
                   <img
                     className="h-8 w-auto"
@@ -53,7 +53,7 @@ export default function HeaderNavbar() {
 
               <div className="flex flex-1 items-center justify-end">
                 {/* Search */}
-                <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
+                <a href="/" className="p-2 text-gray-400 hover:text-gray-500">
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                 </a>
