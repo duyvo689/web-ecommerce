@@ -1,1 +1,1 @@
-export { default } from "../components/cart";
+export { default } from "../modules/cart";

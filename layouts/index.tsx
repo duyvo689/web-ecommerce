@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import React, { useContext } from "react";
+import Footer from "./footer";
 import HeaderNavbar from "./header-navbar";
 
 type BaseLayoutProps = {
@@ -12,6 +13,7 @@ const Layout: FC<BaseLayoutProps> = ({ children }) => {
     <div>
       <HeaderNavbar />
       <div className="">{children}</div>
+      <Footer />
     </div>
   );
 };
