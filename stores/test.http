@@ -1,0 +1,4 @@
+
+curl 'https://ctxvsrfwmbfxsodwuvxv.supabase.co/rest/v1/category?select=*' \
+-H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0eHZzcmZ3bWJmeHNvZHd1dnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njc0MDE3NjgsImV4cCI6MTk4Mjk3Nzc2OH0.ZraLICYhlmsLyv7C40WbdQPmPr5-5aDAv5Y8W68d1lM" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0eHZzcmZ3bWJmeHNvZHd1dnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njc0MDE3NjgsImV4cCI6MTk4Mjk3Nzc2OH0.ZraLICYhlmsLyv7C40WbdQPmPr5-5aDAv5Y8W68d1lM"

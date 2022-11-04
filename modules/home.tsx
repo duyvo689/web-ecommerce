@@ -10,7 +10,7 @@ function Home() {
     <>
       <HomeHeroHeader />
       <HomeTrendingProduct />
-      <HomeCategory />
+      {/* <HomeCategory /> */}
       <HomeExhibition />
     </>
   );

@@ -1,32 +1,37 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { supabase } from "../../configs/supabase-client";
 
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
-    products: null,
+    products: [],
   },
   reducers: {
-    gamesFetched: (state, action) => {
-    //   state.games = action.payload;
+    productsFetched: (state, action) => {
+      state.products = action.payload;
     },
   },
 });
 
-export const getGames = () => {
-  const getGamesAsync = async (
+export const getProductsStore = () => {
+  const getProductsAsync = async (
     dispatch: (arg0: { payload: any; type: string }) => void
   ) => {
     try {
-    //   const response = await GameAPI.getAllGame();
-    //   dispatch(gamesFetched(response?.data.data));
+    
+let { data: products, error } = await supabase
+  .from('products')
+  .select('*')
+if(products)
+      dispatch(productsFetched(products));
     } catch (err) {
       console.log(err);
     }
   };
-  return getGamesAsync;
+  return getProductsAsync;
 };
 
-export const { gamesFetched } = productsSlice.actions;
+export const { productsFetched } = productsSlice.actions;
 export default productsSlice.reducer;
 
 
