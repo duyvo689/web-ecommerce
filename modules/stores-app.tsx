@@ -2,18 +2,15 @@ import { ReactElement, useEffect } from "react";
 import Layout from "../layouts";
 
 import { Fragment, useState } from "react";
-import { Dialog, Disclosure, Menu, Transition } from "@headlessui/react";
+import { Dialog, Menu, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  ChevronDownIcon,
-  FunnelIcon,
-  MinusIcon,
-  PlusIcon,
-  Squares2X2Icon,
-} from "@heroicons/react/20/solid";
+import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
 import Products from "./products";
+import { categoryInterface, productsInterface } from "../values/interfaces";
+import { getCategoriesStore } from "../stores/reducers/categorySlice";
 import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { categoryInterface } from "../values/interfaces";
+import { getProductsStore } from "../stores/reducers/productsSlice";
+import NextLink from "next/link";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -30,10 +27,20 @@ function classNames(...classes: any) {
 export default function Stores() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const dispatch = useAppDispatch();
-  const categoryList: any = [];
+  const categoryList: categoryInterface[] = useAppSelector(
+    (state: any) => state.categories.categories
+  );
+  const productList: productsInterface[] = useAppSelector(
+    (state: any) => state.products.products
+  );
+
+  const [idPr, setIdPr] = useState<string>("b541582e-5973-4235-89fb-2b93baf96614");
 
   useEffect(() => {
-    dispatch(categoryList());
+    if (!categoryList || categoryList.length <= 0) {
+      dispatch(getCategoriesStore());
+      dispatch(getProductsStore());
+    }
   }, []);
 
   return (
@@ -85,13 +92,15 @@ export default function Stores() {
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
                     <ul role="list" className="px-2 py-3 font-medium text-gray-900">
-                      {categoryList.map((category: categoryInterface) => (
-                        <li key={category.name}>
-                          <a href="#" className="block px-2 py-3">
-                            {category.name}
-                          </a>
-                        </li>
-                      ))}
+                      {categoryList &&
+                        categoryList.length > 0 &&
+                        categoryList.map((category: categoryInterface) => (
+                          <li key={category.name}>
+                            <a href="#" className="block px-2 py-3">
+                              {category.name}
+                            </a>
+                          </li>
+                        ))}
                     </ul>
                   </form>
                 </Dialog.Panel>
@@ -183,20 +192,20 @@ export default function Stores() {
                   role="list"
                   className="space-y-4   pb-6 text-sm font-medium text-gray-900"
                 >
-                  {categoryList.map((category: categoryInterface) => (
-                    <li key={category.name}>
-                      {/* <a href={category.href}>{category.name}</a> */}
-                    </li>
-                  ))}
+                  {categoryList &&
+                    categoryList.length > 0 &&
+                    categoryList.map((category: categoryInterface) => (
+                      <li onClick={() => setIdPr(category.id)} key={category.name}>
+                        {category.name}
+                      </li>
+                    ))}
                 </ul>
               </form>
 
               {/* Product grid */}
               <div className="lg:col-span-3">
-                {/* Replace with your content */}
                 {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
-                <Products />
-                {/* /End replace */}
+                <Products productList={productList} id={idPr} />
               </div>
             </div>
           </section>

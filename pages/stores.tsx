@@ -1,1 +1,1 @@
-export { default } from "../modules/stores";
+export { default } from "../modules/stores-app";

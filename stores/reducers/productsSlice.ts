@@ -1,10 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { supabase } from "../../configs/supabase-client";
+import { productsDefault } from "../../values/default-values";
+import { productsInterface } from "../../values/interfaces";
 
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
-    products: [],
+    products: <productsInterface[]>[],
   },
   reducers: {
     productsFetched: (state, action) => {
@@ -22,7 +24,7 @@ export const getProductsStore = () => {
 let { data: products, error } = await supabase
   .from('products')
   .select('*')
-if(products)
+      if (products)
       dispatch(productsFetched(products));
     } catch (err) {
       console.log(err);
@@ -33,11 +35,3 @@ if(products)
 
 export const { productsFetched } = productsSlice.actions;
 export default productsSlice.reducer;
-
-
-//  const dispatch = useAppDispatch();
-//   const gameList = useAppSelector((state) => state.games.games);
-
-//   useEffect(() => {
-//     dispatch(getGames());
-//   }, []);

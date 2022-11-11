@@ -3,8 +3,8 @@ import type { AppProps } from "next/app";
 import Script from "next/script";
 import { ReactElement } from "react";
 import { NextPageWithLayout } from "../utils/core";
-import { store } from "../stores/store";
 import { Provider } from "react-redux";
+import { store } from "../stores";
 
 interface IAppProps extends AppProps {
   Component: NextPageWithLayout;
