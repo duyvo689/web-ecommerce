@@ -1,5 +1,6 @@
 import { Button, Label, Table, TextInput } from "flowbite-react";
-import React, { ReactElement, useEffect } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
+import ModalEditCategory from "../../components/modal-edit-category";
 import { supabase } from "../../configs/supabase-client";
 import Layout from "../../layouts";
 import {
@@ -7,6 +8,7 @@ import {
   insertCategoryStore,
 } from "../../stores/reducers/categorySlice";
 import { useAppDispatch, useAppSelector } from "../../utils/hooks";
+import { categoryDefault } from "../../values/default-values";
 import { categoryInterface } from "../../values/interfaces";
 
 function AddNewCategory() {
@@ -14,7 +16,9 @@ function AddNewCategory() {
   const categoryList: categoryInterface[] = useAppSelector(
     (state: any) => state.categories.categories
   );
-  console.log(categoryList);
+  const [open, setOpen] = useState(false);
+  const [category, setCategory] = useState<categoryInterface>();
+
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     const name = event.target.elements.category.value;
@@ -25,6 +29,11 @@ function AddNewCategory() {
       dispatch(getCategoriesStore());
     }
   }, []);
+
+  const handleOpen = (item: categoryInterface) => {
+    setOpen(!open);
+    setCategory(item);
+  };
   return (
     <div className="grid grid-cols-2 gap-4 mt-10">
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
@@ -58,17 +67,20 @@ function AddNewCategory() {
                 <Table.Cell>{item.name}</Table.Cell>
 
                 <Table.Cell>
-                  <a
-                    href="#"
+                  <span
+                    onClick={() => handleOpen(item)}
                     className="font-medium text-blue-600 hover:underline dark:text-blue-500"
                   >
                     Chỉnh sửa
-                  </a>
+                  </span>
                 </Table.Cell>
               </Table.Row>
             ))}
         </Table.Body>
       </Table>
+      {category && (
+        <ModalEditCategory isOpen={open} setOpen={setOpen} category={category} />
+      )}
     </div>
   );
 }
