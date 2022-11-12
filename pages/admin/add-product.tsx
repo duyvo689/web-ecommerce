@@ -14,7 +14,6 @@ export default function AddProduct() {
   );
 
   const [images, setImages] = useState<File[]>([]);
-  console.log(images);
   useEffect(() => {
     if (!categoryList || categoryList.length <= 0) {
       dispatch(getCategoriesStore());

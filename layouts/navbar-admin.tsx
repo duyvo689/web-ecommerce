@@ -47,7 +47,6 @@ export default function NavbarAdmin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const router = useRouter();
   const currentRoute = router.pathname;
-  console.log(currentRoute);
 
   return (
     <>

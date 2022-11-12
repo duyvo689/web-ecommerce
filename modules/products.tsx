@@ -10,7 +10,6 @@ interface Props {
 
 export default function Products({ productList, id }: Props) {
   const newListpr = productList.filter((item) => item.category_id == id);
-  console.log(newListpr);
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-2 px-4 sm:py-10 sm:px-4 lg:max-w-7xl lg:px-8">
