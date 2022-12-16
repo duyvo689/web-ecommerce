@@ -2,13 +2,16 @@ import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
+import { productsInterface } from "../values/interfaces";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
 
 const navigation = {
   other: [
-    { name: "Home", href: "/" },
-    { name: "Stores", href: "/stores" },
-    { name: "About Us", href: "/" },
-    { name: "Contact", href: "/" },
+    { name: "Trang Chủ", href: "/" },
+    { name: "Cửa Hàng", href: "/stores" },
+    { name: "Thông Tin Cửa Hàng", href: "/" },
+    { name: "Liên Hệ", href: "/" },
   ],
 };
 
@@ -17,6 +20,9 @@ function classNames(...classes: any[]) {
 }
 
 export default function HeaderNavbar() {
+  const productInCart: productsInterface[] = useSelector(
+    (state: RootState) => state.cart
+  );
   return (
     <div className="bg-white z-50">
       <header className="relative bg-white">
@@ -43,7 +49,7 @@ export default function HeaderNavbar() {
                       key={item.name}
                       href={item.href}
                       passHref
-                      className="flex items-center text-sm font-medium text-gray-700 hover:text-gray-800"
+                      className="flex whitespace-nowrap items-center text-sm font-medium text-gray-700 hover:text-gray-800"
                     >
                       {item.name}
                     </NextLink>
@@ -66,7 +72,7 @@ export default function HeaderNavbar() {
                       aria-hidden="true"
                     />
                     <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      0
+                      {productInCart.length}
                     </span>
                     <span className="sr-only">items in cart, view bag</span>
                   </NextLink>

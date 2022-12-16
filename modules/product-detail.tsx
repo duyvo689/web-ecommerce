@@ -1,36 +1,45 @@
 import { ReactElement, useEffect, useState } from "react";
-import { Disclosure, RadioGroup, Tab } from "@headlessui/react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { HeartIcon, MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { Tab } from "@headlessui/react";
 import Layout from "../layouts";
 import { supabase } from "../configs/supabase-client";
 import { useRouter } from "next/router";
 import { productsInterface } from "../values/interfaces";
 import { productsDefault } from "../values/default-values";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/reducers";
+import { cartAction } from "../redux/actions/ReduxAction";
 
 function classNames(...classes: any) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function ProductDetail() {
-  // const [selectedColor, setSelectedColor] = useState(product.colors[0]);
   const router = useRouter();
-  const id = router.query.id;
+  const productId = router.query.id as string;
   const [product, setProduct] = useState<productsInterface>(productsDefault);
-
+  const dispatch = useDispatch();
+  const productInCart: productsInterface[] = useSelector(
+    (state: RootState) => state.cart
+  );
   useEffect(() => {
-    getProductById(id);
-  });
-  const getProductById = async (id: string) => {
+    if (productId) getProductById(productId);
+  }, [productId]);
+  const getProductById = async (idPro: string) => {
     try {
       let { data: products, error } = await supabase
         .from("products")
         .select("*")
-        .eq("id", id);
+        .eq("id", idPro);
+      console.log(idPro);
       if (products) setProduct(products[0]);
+      console.log(error);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const addToCart = (prod: any) => {
+    dispatch(cartAction("cart", [...productInCart, prod]));
   };
 
   return (
@@ -42,32 +51,33 @@ export default function ProductDetail() {
             {/* Image selector */}
             <div className="mx-auto mt-6 hidden w-full max-w-2xl sm:block lg:max-w-none">
               <Tab.List className="grid grid-cols-4 gap-6">
-                {product.image.map((item) => (
-                  <Tab
-                    key={item}
-                    className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
-                  >
-                    {({ selected }) => (
-                      <>
-                        <span className="sr-only"> {item} </span>
-                        <span className="absolute inset-0 overflow-hidden rounded-md">
-                          <img
-                            src={item}
-                            alt=""
-                            className="h-full w-full object-cover object-center"
+                {product &&
+                  product.image.map((item) => (
+                    <Tab
+                      key={item}
+                      className="relative flex h-24 cursor-pointer items-center justify-center rounded-md bg-white text-sm font-medium uppercase text-gray-900 hover:bg-gray-50 focus:outline-none focus:ring focus:ring-opacity-50 focus:ring-offset-4"
+                    >
+                      {({ selected }) => (
+                        <>
+                          <span className="sr-only"> {item} </span>
+                          <span className="absolute inset-0 overflow-hidden rounded-md">
+                            <img
+                              src={item}
+                              alt=""
+                              className="h-full w-full object-cover object-center"
+                            />
+                          </span>
+                          <span
+                            className={classNames(
+                              selected ? "ring-indigo-500" : "ring-transparent",
+                              "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
+                            )}
+                            aria-hidden="true"
                           />
-                        </span>
-                        <span
-                          className={classNames(
-                            selected ? "ring-indigo-500" : "ring-transparent",
-                            "pointer-events-none absolute inset-0 rounded-md ring-2 ring-offset-2"
-                          )}
-                          aria-hidden="true"
-                        />
-                      </>
-                    )}
-                  </Tab>
-                ))}
+                        </>
+                      )}
+                    </Tab>
+                  ))}
               </Tab.List>
             </div>
 
@@ -95,26 +105,6 @@ export default function ProductDetail() {
               <p className="text-3xl tracking-tight text-gray-900">{product.price}</p>
             </div>
 
-            {/* Reviews */}
-            <div className="mt-3">
-              <h3 className="sr-only">Reviews</h3>
-              <div className="flex items-center">
-                {/* <div className="flex items-center">
-                  {[0, 1, 2, 3, 4].map((rating) => (
-                    <StarIcon
-                      key={rating}
-                      className={classNames(
-                        product.rating > rating ? "text-indigo-500" : "text-gray-300",
-                        "h-5 w-5 flex-shrink-0"
-                      )}
-                      aria-hidden="true"
-                    />
-                  ))}
-                </div> */}
-                <p className="sr-only">{product.like} out of 5 stars</p>
-              </div>
-            </div>
-
             <div className="mt-6">
               <h3 className="sr-only">Description</h3>
 
@@ -128,62 +118,15 @@ export default function ProductDetail() {
               {/* Colors */}
               <div>
                 <h3 className="text-sm text-gray-600">Color</h3>
-
-                {/* <RadioGroup
-                  value={selectedColor}
-                  onChange={setSelectedColor}
-                  className="mt-2"
-                >
-                  <RadioGroup.Label className="sr-only">
-                    {" "}
-                    Choose a color{" "}
-                  </RadioGroup.Label> */}
-                {/* <span className="flex items-center space-x-3">
-                    {product.colors.map((color) => (
-                      <RadioGroup.Option
-                        key={color.name}
-                        value={color}
-                        className={({ active, checked }) =>
-                          classNames(
-                            color.selectedColor,
-                            active && checked ? "ring ring-offset-1" : "",
-                            !active && checked ? "ring-2" : "",
-                            "-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none"
-                          )
-                        }
-                      >
-                        <RadioGroup.Label as="span" className="sr-only">
-                          {" "}
-                          {color.name}{" "}
-                        </RadioGroup.Label>
-                        <span
-                          aria-hidden="true"
-                          className={classNames(
-                            color.bgColor,
-                            "h-8 w-8 border border-black border-opacity-10 rounded-full"
-                          )}
-                        />
-                      </RadioGroup.Option>
-                    ))}
-                  </span> */}
-                {/* </RadioGroup> */}
               </div>
 
               <div className="sm:flex-col1 mt-10 flex">
-                <button
-                  type="submit"
+                <div
+                  onClick={() => addToCart(product)}
                   className="flex max-w-xs flex-1 items-center justify-center rounded-md border border-transparent bg-indigo-600 py-3 px-8 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50 sm:w-full"
                 >
-                  Add to bag
-                </button>
-
-                <button
-                  type="button"
-                  className="ml-4 flex items-center justify-center rounded-md py-3 px-3 text-gray-400 hover:bg-gray-100 hover:text-gray-500"
-                >
-                  <HeartIcon className="h-6 w-6 flex-shrink-0" aria-hidden="true" />
-                  <span className="sr-only">Add to favorites</span>
-                </button>
+                  Thêm Vào Giỏ Hàng
+                </div>
               </div>
             </form>
 

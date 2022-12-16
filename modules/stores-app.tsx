@@ -7,10 +7,9 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, FunnelIcon, Squares2X2Icon } from "@heroicons/react/20/solid";
 import Products from "./products";
 import { categoryInterface, productsInterface } from "../values/interfaces";
-import { getCategoriesStore } from "../stores/reducers/categorySlice";
-import { useAppDispatch, useAppSelector } from "../utils/hooks";
-import { getProductsStore } from "../stores/reducers/productsSlice";
-import NextLink from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { supabase } from "../configs/supabase-client";
+import { categoryAction, productAction } from "../redux/actions/ReduxAction";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -26,23 +25,39 @@ function classNames(...classes: any) {
 
 export default function Stores() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
-  const dispatch = useAppDispatch();
-  const categoryList: categoryInterface[] = useAppSelector(
-    (state: any) => state.categories.categories
-  );
-  const productList: productsInterface[] = useAppSelector(
-    (state: any) => state.products.products
-  );
-
-  const [idPr, setIdPr] = useState<string>("b541582e-5973-4235-89fb-2b93baf96614");
+  const dispatch = useDispatch();
+  const categoryList: categoryInterface[] = useSelector((state: any) => state.category);
+  const productList: productsInterface[] = useSelector((state: any) => state.products);
+  const [idPr, setIdPr] = useState<string>("");
 
   useEffect(() => {
-    if (!categoryList || categoryList.length <= 0) {
-      dispatch(getCategoriesStore());
-      dispatch(getProductsStore());
+    if (!categoryList || categoryList.length == 0) {
+      getCategoriesAsync();
+    }
+    if (!productList || productList.length == 0) {
+      getProductsAsync();
     }
   }, []);
+  useEffect(() => {
+    productList && productList.length > 0 && setIdPr(productList[0].category_id);
+  }, [productList]);
 
+  const getCategoriesAsync = async () => {
+    try {
+      let { data: category, error } = await supabase.from("category").select("*");
+      dispatch(categoryAction("category", category));
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  const getProductsAsync = async () => {
+    try {
+      let { data: products, error } = await supabase.from("products").select("*");
+      dispatch(productAction("products", products));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <div className="bg-white">
       <div>

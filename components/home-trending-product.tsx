@@ -86,9 +86,9 @@ export default function HomeTrendingProduct() {
               role="list"
               className="mx-4 inline-flex space-x-8 sm:mx-6 lg:mx-0 lg:grid lg:grid-cols-4 lg:gap-x-8 lg:space-x-0"
             >
-              {trendingProducts.map((product) => (
+              {trendingProducts.map((product, index) => (
                 <li
-                  key={product.id}
+                  key={index}
                   className="inline-flex w-64 flex-col text-center lg:w-auto"
                 >
                   <div className="group relative">
@@ -116,9 +116,9 @@ export default function HomeTrendingProduct() {
                     role="list"
                     className="mt-auto flex items-center justify-center space-x-3 pt-6"
                   >
-                    {product.availableColors.map((color) => (
+                    {product.availableColors.map((color, index) => (
                       <li
-                        key={color.name}
+                        key={index}
                         className="h-4 w-4 rounded-full border border-black border-opacity-10"
                         style={{ backgroundColor: color.colorBg }}
                       >

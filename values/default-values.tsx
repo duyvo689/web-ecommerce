@@ -1,12 +1,14 @@
 export const categoryDefault = {
+  id: "",
   name: "",
+  imgae: "",
 };
 
 export const productsDefault = {
+  id: "",
   name: "",
   price: 0,
   description: "",
-  like: 0,
-  image: [],
-  category_id: categoryDefault,
+  image: [""],
+  category_id: "",
 };

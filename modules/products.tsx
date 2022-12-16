@@ -9,19 +9,19 @@ interface Props {
 }
 
 export default function Products({ productList, id }: Props) {
-  const newListpr = productList.filter((item) => item.category_id == id);
+  const newListpr = productList.filter((item: any) => item.category_id == id);
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl py-2 px-4 sm:py-10 sm:px-4 lg:max-w-7xl lg:px-8">
-        <div className="mt-2 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+        <div className="mt-2 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {newListpr.map((product) => (
             <NextLink href={`/product-detail/${product.id}`} passHref>
               <div key={product.id} className="group relative">
-                <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
+                <div className="min-h-80 w-[260px] aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
                   <img
                     src={product.image[0]}
                     alt={product.image[0]}
-                    className="h-full w-full object-cover object-center lg:h-full lg:w-full"
+                    className="h-full w-full object-fill lg:h-full lg:w-full"
                   />
                 </div>
                 <div className="mt-4 flex justify-between">

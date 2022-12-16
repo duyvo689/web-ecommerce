@@ -38,7 +38,7 @@ function HomeExhibition() {
         <div className="mt-16 space-y-16">
           {features.map((feature, featureIdx) => (
             <div
-              key={feature.name}
+              key={featureIdx}
               className="flex flex-col-reverse lg:grid lg:grid-cols-12 lg:items-center lg:gap-x-8"
             >
               <div

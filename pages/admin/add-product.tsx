@@ -1,24 +1,31 @@
-import { Button } from "flowbite-react";
 import { ReactElement, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import { supabase } from "../../configs/supabase-client";
 import Layout from "../../layouts";
-import { getCategoriesStore } from "../../stores/reducers/categorySlice";
+import { categoryAction } from "../../redux/actions/ReduxAction";
+import { RootState } from "../../redux/reducers";
 import { createImgId } from "../../utils/funtions";
-import { useAppDispatch, useAppSelector } from "../../utils/hooks";
 import { categoryInterface } from "../../values/interfaces";
 
 export default function AddProduct() {
-  const dispatch = useAppDispatch();
-  const categoryList: categoryInterface[] = useAppSelector(
-    (state: any) => state.categories.categories
+  const dispatch = useDispatch();
+  const categoryList: categoryInterface[] = useSelector(
+    (state: RootState) => state.category
   );
-
   const [images, setImages] = useState<File[]>([]);
   useEffect(() => {
-    if (!categoryList || categoryList.length <= 0) {
-      dispatch(getCategoriesStore());
-    }
+    getCategoriesAsync();
   }, []);
+
+  const getCategoriesAsync = async () => {
+    try {
+      let { data: category, error } = await supabase.from("category").select("*");
+      dispatch(categoryAction("category", category));
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -57,6 +64,7 @@ export default function AddProduct() {
             .getPublicUrl(filePath[i]);
           publicUrls.push(publicUrl.data.publicUrl);
         }
+        console.log(publicUrls);
         return publicUrls;
       }
     } catch (error) {
@@ -192,7 +200,7 @@ export default function AddProduct() {
                         type="file"
                         multiple
                         className="sr-only"
-                        onChange={(e) => setImages([...images, ...e.target.files])}
+                        onChange={(e: any) => setImages([...images, ...e.target.files])}
                       />
                     </label>
                     <p className="pl-1">or drag and drop</p>
@@ -220,10 +228,11 @@ export default function AddProduct() {
           </div>
         </div>
 
-        <Button className="mt-4" type="submit">
+        {/* <Button className="mt-4" type="submit">
           Thêm sản phẩm
-        </Button>
+        </Button> */}
       </form>
+      <button onClick={uploadImageProduct}>duyvo</button>
     </>
   );
 }

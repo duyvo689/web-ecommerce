@@ -1,4 +1,12 @@
-
-curl 'https://ctxvsrfwmbfxsodwuvxv.supabase.co/rest/v1/category?select=*' \
--H "apikey: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0eHZzcmZ3bWJmeHNvZHd1dnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njc0MDE3NjgsImV4cCI6MTk4Mjk3Nzc2OH0.ZraLICYhlmsLyv7C40WbdQPmPr5-5aDAv5Y8W68d1lM" \
--H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImN0eHZzcmZ3bWJmeHNvZHd1dnh2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2Njc0MDE3NjgsImV4cCI6MTk4Mjk3Nzc2OH0.ZraLICYhlmsLyv7C40WbdQPmPr5-5aDAv5Y8W68d1lM"
+curl \
+-X POST \
+-H "Content-Type: application/json" \
+-H 'access_token: SFW2Mq9QkJbz_GbOIrstENdy3LbDHR4w1fXN43D-dNLSsLTFAJw794cPGWH-IxiN4uDJ8MDdc4TMcM1494Eb95UY7HqGNFuSS8SaVmH3p1LGh2mV91QGBb7aV2vaHCGF4v4V9JXEzJLRcaW_4M2M5tF3SJ4sDS1HR_qxHmqXvqzn_rPd4okmGsVe3NyfBUn7ROuKOGqehG1xzrubD3_c5LZ-FIyOAiqyMOiD72vhtYaRqICeRndiJbZ9FLCg3TXOOk0OPrSTg7HZwsrF72ZTILBS9LHb2SWm3lmf9KuvoKO__7LwT3hBRIZ65bbzCjboGlLfU2W6r65lnGfxGp06bubIGa6wE0' \
+-d '{ 
+  "recipient":{
+    "user_id":"7338592159939223071"
+  },
+  "message":{
+    "text":"hello, Thông báo từ Aura ID"
+  }
+}' "https://openapi.zalo.me/v2.0/oa/message"

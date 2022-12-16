@@ -1,18 +1,15 @@
 
 export interface productsInterface {
-    id?: string
-    created_at?: Date
+    id: string
     name: string
     price: number
     description: string
-    like: number
-    image: []
-    category_id: categoryInterface
+    image: string[]
+    category_id: string
 }
 
 export interface categoryInterface {
-     id?: string
-    created_at?: Date
+     id: string
     name: string
 }
 

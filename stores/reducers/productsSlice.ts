@@ -1,6 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { supabase } from "../../configs/supabase-client";
-import { productsDefault } from "../../values/default-values";
 import { productsInterface } from "../../values/interfaces";
 
 export const productsSlice = createSlice({
