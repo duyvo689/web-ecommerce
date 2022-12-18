@@ -24,9 +24,17 @@ const cartAction = (type: any, cart: productsInterface[] | null) => {
     cart,
   };
 };
+const productTrendAction = (type: any, productTrend: productsInterface[] | null) => {
+  return {
+    type,
+    productTrend,
+  };
+};
+
 
 export {
 cartAction,
   categoryAction,
-  productAction
+  productAction,
+  productTrendAction
 };

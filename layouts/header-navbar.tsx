@@ -10,8 +10,8 @@ const navigation = {
   other: [
     { name: "Trang Chủ", href: "/" },
     { name: "Cửa Hàng", href: "/stores" },
-    { name: "Thông Tin Cửa Hàng", href: "/" },
-    { name: "Liên Hệ", href: "/" },
+    { name: "Thông Tin Cửa Hàng", href: "/about" },
+    { name: "Liên Hệ", href: "/contact" },
   ],
 };
 
@@ -71,9 +71,15 @@ export default function HeaderNavbar() {
                       className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
                     />
-                    <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                      {productInCart.length}
-                    </span>
+                    {productInCart.length == 0 ? (
+                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                        0
+                      </span>
+                    ) : (
+                      <span className="p-1 w-6 h-6 text-black items-center flex justify-center rounded-full bg-red-500 ml-2 text-sm font-medium  group-hover:text-white">
+                        {productInCart.length}
+                      </span>
+                    )}
                     <span className="sr-only">items in cart, view bag</span>
                   </NextLink>
                 </div>

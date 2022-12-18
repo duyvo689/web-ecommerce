@@ -6,6 +6,7 @@ import { cartAction } from "../redux/actions/ReduxAction";
 import { RootState } from "../redux/reducers";
 import { productsInterface } from "../values/interfaces";
 import NextLink from "next/link";
+import toast from "react-hot-toast";
 
 export default function Cart() {
   const products: productsInterface[] = useSelector((state: RootState) => state.cart);
@@ -13,6 +14,7 @@ export default function Cart() {
   const remoteProductInCart = (pro: productsInterface) => {
     const newProduct = products.filter((product) => product.id != pro.id);
     dispatch(cartAction("cart", newProduct));
+    toast.success("Đã xoá sản phẩm khỏi giỏ hàng");
   };
 
   const totalPrice = (pros: any) => {
@@ -37,8 +39,7 @@ export default function Cart() {
               role="list"
               className="divide-y divide-gray-200 border-t border-b border-gray-200"
             >
-              {products &&
-                products.length > 0 &&
+              {products && products.length > 0 ? (
                 products.map((product) => (
                   <li key={product.id} className="flex py-6">
                     <div className="flex-shrink-0">
@@ -83,7 +84,12 @@ export default function Cart() {
                       </div>
                     </div>
                   </li>
-                ))}
+                ))
+              ) : (
+                <div className="flex justify-center items-center h-[200px]">
+                  Chưa có sản phẩm nào trong giỏ hàng!
+                </div>
+              )}
             </ul>
           </section>
 
@@ -105,14 +111,23 @@ export default function Cart() {
             </div>
 
             <div className="mt-10">
-              <NextLink href={`/checkout`} passHref>
+              {products && products.length > 0 ? (
+                <NextLink href={`/checkout`} passHref>
+                  <button
+                    type="submit"
+                    className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Thanh Toán
+                  </button>
+                </NextLink>
+              ) : (
                 <button
-                  type="submit"
-                  className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  disabled
+                  className="w-full rounded-md border border-transparent bg-gray-500 py-3 px-4 text-base font-medium text-white"
                 >
                   Thanh Toán
                 </button>
-              </NextLink>
+              )}
             </div>
           </section>
         </form>

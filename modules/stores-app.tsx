@@ -10,6 +10,7 @@ import { categoryInterface, productsInterface } from "../values/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { supabase } from "../configs/supabase-client";
 import { categoryAction, productAction } from "../redux/actions/ReduxAction";
+import LoadingCenter from "../components/loading";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -61,7 +62,6 @@ export default function Stores() {
   return (
     <div className="bg-white">
       <div>
-        {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
           <Dialog
             as="div"
@@ -127,14 +127,14 @@ export default function Stores() {
         <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-baseline justify-between border-b border-gray-200 pt-10 pb-6">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">
-              New Arrivals
+              Danh mục sản phẩm
             </h1>
 
             <div className="flex items-center">
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <Menu.Button className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
-                    Sort
+                    Sắp xếp
                     <ChevronDownIcon
                       className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                       aria-hidden="true"
@@ -194,35 +194,40 @@ export default function Stores() {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pt-6 pb-24">
+          <section aria-labelledby="products-heading" className="pt-6 pb-2">
             <h2 id="products-heading" className="sr-only">
               Products
             </h2>
+            <>
+              {categoryList && categoryList.length > 0 ? (
+                <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+                  {/* Filters */}
+                  <form className="hidden lg:block">
+                    <h3 className="sr-only">Categories</h3>
+                    <ul
+                      role="list"
+                      className="space-y-4   pb-6 text-sm font-medium text-gray-900"
+                    >
+                      {categoryList &&
+                        categoryList.length > 0 &&
+                        categoryList.map((category: categoryInterface) => (
+                          <li onClick={() => setIdPr(category.id)} key={category.name}>
+                            {category.name}
+                          </li>
+                        ))}
+                    </ul>
+                  </form>
 
-            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
-              {/* Filters */}
-              <form className="hidden lg:block">
-                <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4   pb-6 text-sm font-medium text-gray-900"
-                >
-                  {categoryList &&
-                    categoryList.length > 0 &&
-                    categoryList.map((category: categoryInterface) => (
-                      <li onClick={() => setIdPr(category.id)} key={category.name}>
-                        {category.name}
-                      </li>
-                    ))}
-                </ul>
-              </form>
-
-              {/* Product grid */}
-              <div className="lg:col-span-3">
-                {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
-                <Products productList={productList} id={idPr} />
-              </div>
-            </div>
+                  {/* Product grid */}
+                  <div className="lg:col-span-3">
+                    {/* <div className="h-96 rounded-lg border-4 border-dashed border-gray-200 lg:h-full" /> */}
+                    <Products productList={productList} id={idPr} />
+                  </div>
+                </div>
+              ) : (
+                LoadingCenter()
+              )}
+            </>
           </section>
         </main>
       </div>

@@ -1,11 +1,10 @@
 const navigation = {
   main: [
-    { name: "About", href: "#" },
+    { name: "Về chúng tôi", href: "#" },
     { name: "Blog", href: "#" },
-    { name: "Jobs", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Accessibility", href: "#" },
-    { name: "Partners", href: "#" },
+    { name: "Tuyển dụng", href: "#" },
+    { name: "Đánh giá", href: "#" },
+    { name: "Thành viên", href: "#" },
   ],
   social: [
     {
@@ -98,7 +97,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="mt-8 text-center text-base text-gray-400">
-          &copy; 2020 Your Company, Inc. All rights reserved.
+          &copy; 2022 Công ty sản xuất bao bì tái chế DUYDUY
         </p>
       </div>
     </footer>
