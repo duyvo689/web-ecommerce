@@ -8,15 +8,30 @@ const login = () => {
     event.preventDefault();
     const email = event.target.elements.email.value;
     const password = event.target.elements.password.value;
+    console.log(email, password);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: email,
       password: password,
     });
     console.log(data, error);
     if (data.session) {
+      localStorage.setItem("token", data.session.access_token);
       router.push("/admin");
     }
   };
+
+  const signUpWithEmail = async (event: any) => {
+    event.preventDefault();
+    const email = event.target.elements.email.value;
+    const password = event.target.elements.password.value;
+    console.log(email, password);
+    const { data, error } = await supabase.auth.signUp({
+      email: email,
+      password: password,
+    });
+    console.log(data, error);
+  };
+
   return (
     <div className="max-w-[50%] m-auto block mt-20 text-center">
       <h2 className="font-bold text-xl mb-6">ĐĂNG NHẬP VÀO ADMIN</h2>

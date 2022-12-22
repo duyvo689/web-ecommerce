@@ -13,3 +13,23 @@ export interface categoryInterface {
     name: string
 }
 
+export interface orderInterface {
+     id: string
+    name: string
+    phone: string
+    address: string
+    description: string
+    created_at:Date
+}
+
+export interface orderDetailInterface {
+     id: string
+    product_id: productsInterface
+    order_id: string | orderInterface
+    total: number
+status: string
+price: number
+    created_at:Date
+}
+
+

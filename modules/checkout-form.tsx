@@ -1,4 +1,4 @@
-import { ReactElement, useState } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import Layout from "../layouts";
 import { Tabs } from "flowbite-react";
 import { supabase } from "../configs/supabase-client";
@@ -8,6 +8,7 @@ import LoadingCenter from "../components/loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { productsInterface } from "../values/interfaces";
+import axios from "axios";
 
 const fieldsOfForm: any = {
   name: "Vui lòng nhập tên người nhận!",
@@ -15,8 +16,33 @@ const fieldsOfForm: any = {
   address: "Vui lòng nhập địa chỉ người nhận!",
 };
 
+interface THANHPHO {
+  code: string;
+  name: string;
+  _id: string;
+}
+
+interface HUYEN {
+  code: string;
+  name: string;
+  _id: string;
+}
+
+interface XA {
+  code: string;
+  name: string;
+  path_with_type: string;
+  _id: string;
+}
+
 export default function CheckOut() {
   const [load, setLoad] = useState<boolean>(false);
+  const [thanhPho, setThanhPho] = useState<THANHPHO[]>();
+  const [huyen, setHuyen] = useState<HUYEN[]>();
+  const [xa, setXa] = useState<XA[]>();
+  const [codeTp, setCodeTp] = useState<string>();
+  const [codeH, setCodeH] = useState<string>();
+  const [addressApi, setAddressApi] = useState<string>();
   const products: productsInterface[] = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
   console.log(products);
@@ -84,6 +110,42 @@ export default function CheckOut() {
     return true;
   }
 
+  async function getAllTinhVn() {
+    const data = await axios({
+      method: "get",
+      url: " https://vn-public-apis.fpo.vn/provinces/getAll?limit=-1",
+    });
+    setThanhPho(data.data.data.data);
+  }
+
+  async function getAllHuyenOfTinhVn(code: string) {
+    const data = await axios({
+      method: "get",
+      url: `https://vn-public-apis.fpo.vn/districts/getByProvince?provinceCode=${code}&limit=-1`,
+    });
+    setHuyen(data.data.data.data);
+  }
+
+  async function getAllXaOfHuyenOfTinhVn(code: string) {
+    const data = await axios({
+      method: "get",
+      url: `https://vn-public-apis.fpo.vn/wards/getByDistrict?districtCode=${code}&limit=-1`,
+    });
+    setXa(data.data.data.data);
+  }
+
+  useEffect(() => {
+    getAllTinhVn();
+  }, []);
+
+  useEffect(() => {
+    codeTp && getAllHuyenOfTinhVn(codeTp);
+  }, [codeTp]);
+
+  useEffect(() => {
+    codeH && getAllXaOfHuyenOfTinhVn(codeH);
+  }, [codeH]);
+
   return (
     <>
       {!load ? (
@@ -133,12 +195,83 @@ export default function CheckOut() {
                             />
                           </div>
                         </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="mt-6">
+                            <label
+                              htmlFor="location"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Tỉnh (Thành phố)
+                            </label>
+                            <select
+                              onChange={(e: any) => setCodeTp(e.target.value)}
+                              id="location"
+                              name="location"
+                              className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                              defaultValue="Canada"
+                            >
+                              {thanhPho &&
+                                thanhPho.length > 0 &&
+                                thanhPho.map((item, index) => (
+                                  <option value={item.code} key={index}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
+                          <div className="mt-6">
+                            <label
+                              htmlFor="location"
+                              className="block text-sm font-medium text-gray-700"
+                            >
+                              Huyện (Quận)
+                            </label>
+                            <select
+                              onChange={(e: any) => setCodeH(e.target.value)}
+                              id="location"
+                              name="location"
+                              className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                              defaultValue="Canada"
+                            >
+                              {huyen &&
+                                huyen.length > 0 &&
+                                huyen.map((item, index) => (
+                                  <option value={item.code} key={index}>
+                                    {item.name}
+                                  </option>
+                                ))}
+                            </select>
+                          </div>
+                        </div>
+                        <div className="mt-6">
+                          <label
+                            htmlFor="location"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Xã (Phường)
+                          </label>
+                          <select
+                            onChange={(e: any) => setAddressApi(e.target.value)}
+                            id="location"
+                            name="location"
+                            className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
+                            defaultValue="Canada"
+                          >
+                            {xa &&
+                              xa.length > 0 &&
+                              xa.map((item, index) => (
+                                <option value={item.path_with_type} key={index}>
+                                  {item.name}
+                                </option>
+                              ))}
+                          </select>
+                        </div>
                         <div className="mt-6">
                           <label
                             htmlFor="email-address"
                             className="block text-sm font-medium text-gray-700"
                           >
-                            Địa chỉ giao hàng
+                            Địa chỉ giao hàng (Ghi rõ số nhà, thôn, xã, huyện, tp)
                           </label>
                           <div className="mt-1">
                             <input

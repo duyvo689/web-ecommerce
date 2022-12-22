@@ -1,11 +1,12 @@
-import { Fragment, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
 import { TextInput } from "flowbite-react";
 import { supabase } from "../configs/supabase-client";
-import { useAppDispatch } from "../utils/hooks";
-import { categoriesFetched } from "../stores/reducers/categorySlice";
 import { categoryInterface } from "../values/interfaces";
+import { categoryAction } from "../redux/actions/ReduxAction";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 interface Props {
   isOpen: boolean;
@@ -14,20 +15,35 @@ interface Props {
 }
 export default function ModalEditCategory({ isOpen, setOpen, category }: Props) {
   const id = category.id;
+  const dispatch = useDispatch();
   const [name, setName] = useState<string>(category.name);
-  const dispatch = useAppDispatch();
-
+  const [load, setLoad] = useState<boolean>(false);
+  useEffect(() => {
+    setName(category.name);
+  }, [category]);
+  const getCategoriesAsync = async () => {
+    try {
+      let { data: category, error } = await supabase.from("category").select("*");
+      dispatch(categoryAction("category", category));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   const handleUpdate = async () => {
-    console.log(id, name);
-    const { data, error } = await supabase
-      .from("category")
-      .update({ name: name })
-      .eq("id", id);
-    console.log(error);
-    let { data: category } = await supabase.from("category").select("*");
-    if (category) dispatch(categoriesFetched(category));
-    setName("");
-    setOpen(false);
+    try {
+      setLoad(true);
+      const { data, error } = await supabase
+        .from("category")
+        .update({ name: name })
+        .eq("id", id);
+      await getCategoriesAsync();
+      toast.success(`Đã chỉnh sửa danh mục`);
+      setName("");
+      setOpen(false);
+    } catch (error) {
+    } finally {
+      setLoad(false);
+    }
   };
   return (
     <Transition.Root show={isOpen} as={Fragment}>
@@ -86,7 +102,7 @@ export default function ModalEditCategory({ isOpen, setOpen, category }: Props) 
                     className="inline-flex w-full justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-2 sm:text-sm"
                     onClick={handleUpdate}
                   >
-                    Chỉnh sửa
+                    {load ? "Đang cập nhập..." : "Chỉnh sửa"}
                   </button>
                   <button
                     type="button"

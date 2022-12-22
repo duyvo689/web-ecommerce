@@ -1,6 +1,7 @@
+import { Button } from "flowbite-react";
 import { ReactElement, useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux/es/hooks/useSelector";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 import { supabase } from "../../configs/supabase-client";
 import Layout from "../../layouts";
 import { categoryAction } from "../../redux/actions/ReduxAction";
@@ -14,6 +15,7 @@ export default function AddProduct() {
     (state: RootState) => state.category
   );
   const [images, setImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     getCategoriesAsync();
   }, []);
@@ -28,22 +30,31 @@ export default function AddProduct() {
   };
 
   const handleSubmit = async (event: any) => {
-    event.preventDefault();
-    const name = event.target.elements.name.value;
-    const price = event.target.elements.price.value;
-    const category = event.target.elements.category.value;
-    const description = event.target.elements.description.value;
+    setLoading(true);
+    try {
+      event.preventDefault();
+      const name = event.target.elements.name.value;
+      const price = event.target.elements.price.value;
+      const category = event.target.elements.category.value;
+      const description = event.target.elements.description.value;
 
-    const arrImage = await uploadImageProduct();
-    const { data, error } = await supabase.from("products").insert([
-      {
-        name: name,
-        price: price,
-        category_id: category,
-        description: description,
-        image: arrImage,
-      },
-    ]);
+      const arrImage = await uploadImageProduct();
+      const { data, error } = await supabase.from("products").insert([
+        {
+          name: name,
+          price: price,
+          category_id: category,
+          description: description,
+          image: arrImage,
+        },
+      ]);
+      toast.success(`Đã thêm sản phẩm`);
+      event.target.reset();
+      setImages([]);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
   };
 
   const uploadImageProduct = async () => {
@@ -140,8 +151,10 @@ export default function AddProduct() {
                       className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     >
                       {categoryList &&
-                        categoryList.map((category) => (
-                          <option value={category.id}>{category.name}</option>
+                        categoryList.map((category, index) => (
+                          <option key={index} value={category.id}>
+                            {category.name}
+                          </option>
                         ))}
                     </select>
                   </div>
@@ -228,11 +241,11 @@ export default function AddProduct() {
           </div>
         </div>
 
-        {/* <Button className="mt-4" type="submit">
-          Thêm sản phẩm
-        </Button> */}
+        <Button className="mt-4" type="submit">
+          {loading ? "Đang thêm sản phẩm..." : "Thêm sản phẩm"}
+        </Button>
       </form>
-      <button onClick={uploadImageProduct}>duyvo</button>
+      {/* <button onClick={uploadImageProduct}>duyvo</button> */}
     </>
   );
 }

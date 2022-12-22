@@ -1,5 +1,5 @@
 
-import { categoryInterface, productsInterface } from "../../values/interfaces";
+import { categoryInterface, orderInterface, productsInterface } from "../../values/interfaces";
 
 
 const categoryAction = (type: any, category: categoryInterface[] | null) => {
@@ -31,10 +31,18 @@ const productTrendAction = (type: any, productTrend: productsInterface[] | null)
   };
 };
 
+const orderAction = (type: any, orders: orderInterface[] | null) => {
+  return {
+    type,
+    orders,
+  };
+};
+
 
 export {
 cartAction,
   categoryAction,
   productAction,
-  productTrendAction
+  productTrendAction,
+  orderAction
 };

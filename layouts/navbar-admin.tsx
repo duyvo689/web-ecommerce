@@ -16,7 +16,7 @@ import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/router";
 
 const navigation = [
-  { name: "Bảng điều khiển", href: "/admin", icon: HomeIcon, current: true },
+  // { name: "Bảng điều khiển", href: "/admin", icon: HomeIcon, current: true },
   { name: "Thêm sản phẩm", href: "/admin/add-product", icon: UsersIcon, current: false },
   {
     name: "Quản lý đơn đặt hàng",
@@ -30,8 +30,6 @@ const navigation = [
     icon: CalendarIcon,
     current: false,
   },
-  { name: "Documents", href: "#", icon: InboxIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartBarIcon, current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "#" },
