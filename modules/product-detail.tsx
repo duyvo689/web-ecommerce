@@ -19,6 +19,7 @@ export default function ProductDetail() {
   const router = useRouter();
   const productId = router.query.id as string;
   const [product, setProduct] = useState<productsInterface>();
+  const [soLuong, setSoLuong] = useState<number>(10);
   const dispatch = useDispatch();
   const productInCart: productsInterface[] = useSelector(
     (state: RootState) => state.cart
@@ -41,7 +42,8 @@ export default function ProductDetail() {
   };
 
   const addToCart = (prod: any) => {
-    dispatch(cartAction("cart", [...productInCart, prod]));
+    let pro: productsInterface = { ...prod, total: soLuong };
+    dispatch(cartAction("cart", [...productInCart, pro]));
     toast.success("Đã thêm sản phẩm vào của hàng");
   };
 
@@ -117,7 +119,21 @@ export default function ProductDetail() {
                     dangerouslySetInnerHTML={{ __html: product.description }}
                   />
                 </div>
-
+                <div className="flex gap-6 mt-10">
+                  <div className="font-bold">Số lượng</div>
+                  <select
+                    onChange={(e: any) => setSoLuong(e.target.value)}
+                    className="block max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
+                  >
+                    <option value={10}>10</option>
+                    <option value={50}>50</option>
+                    <option value={100}>100</option>
+                    <option value={200}>200</option>
+                    <option value={500}>500</option>
+                    <option value={1000}>1000</option>
+                    <option value={2000}>2000</option>
+                  </select>
+                </div>
                 <form className="mt-6">
                   <div className="sm:flex-col1 mt-10 flex">
                     <div

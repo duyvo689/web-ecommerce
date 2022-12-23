@@ -90,7 +90,10 @@ export default function AddProduct() {
   };
   return (
     <>
-      <form className="space-y-8 divide-gray-200 mb-20" onSubmit={handleSubmit}>
+      <form
+        className="space-y-8 divide-gray-200 mb-20 max-w-[850px] m-auto"
+        onSubmit={handleSubmit}
+      >
         <div className="space-y-8 divide-gray-200">
           <div>
             <div>

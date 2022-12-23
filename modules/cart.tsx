@@ -70,7 +70,7 @@ export default function Cart() {
                             className="h-5 w-5 flex-shrink-0 text-green-500"
                             aria-hidden="true"
                           />
-                          )<span>Số lượng 1</span>
+                          )<span>Số lượng: {product.total ? product.total : 10}</span>
                         </p>
                         <div className="ml-4">
                           <button

@@ -6,6 +6,7 @@ export interface productsInterface {
     description: string
     image: string[]
     category_id: string
+    total: number
 }
 
 export interface categoryInterface {
@@ -20,6 +21,7 @@ export interface orderInterface {
     address: string
     description: string
     created_at:Date
+    confirm:boolean
 }
 
 export interface orderDetailInterface {

@@ -1,9 +1,12 @@
 import { CheckIcon, ClockIcon } from "@heroicons/react/20/solid";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import React, { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import LoadingCenter from "../../../components/loading";
 import { supabase } from "../../../configs/supabase-client";
 import Layout from "../../../layouts";
+import { orderAction } from "../../../redux/actions/ReduxAction";
 import { converToMoney } from "../../../utils/funtions";
 import { orderDetailInterface } from "../../../values/interfaces";
 
@@ -11,7 +14,7 @@ function DetailOrder() {
   const { id } = useRouter().query;
   const [loading, setLoading] = useState<boolean>(false);
   const [orderDetail, setOrderDetail] = useState<orderDetailInterface[]>([]);
-
+  const dispatch = useDispatch();
   const totalPrice = (order: any) => {
     let total = order.reduce(
       (accumulator: any, currentValue: any) => accumulator + currentValue.price,
@@ -33,6 +36,26 @@ function DetailOrder() {
       setLoading(false);
     }
   }
+  async function xacNhanDonHang(idOrder: any) {
+    let { data: detail_order, error } = await supabase
+      .from("orders")
+      .update({ confirm: true })
+      .eq("id", idOrder);
+    toast.success(`Đã xác nhận đơn hàng`);
+    getListOrderAsync();
+    router.push("/admin");
+  }
+  const getListOrderAsync = async () => {
+    try {
+      let { data: orders, error } = await supabase
+        .from("orders")
+        .select("*")
+        .order("created_at", { ascending: false });
+      dispatch(orderAction("orders", orders));
+    } catch (err) {
+      console.log(err);
+    }
+  };
   useEffect(() => {
     getOrderDetail(id);
   }, []);
@@ -77,7 +100,7 @@ function DetailOrder() {
                               </p>
                             </div>
                             <p className="text-right text-sm font-medium text-gray-900 mt-6">
-                              Tổng giá: {product.price} VNĐ
+                              Tổng giá: {converToMoney(product.price)} VNĐ
                             </p>
                             <div className="mt-4 flex justify-center items-center sm:absolute sm:top-0 sm:left-1/2 sm:mt-0 sm:block">
                               <div className="flex justify-center items-center max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm">
@@ -136,12 +159,12 @@ function DetailOrder() {
                   </div>
                 </div>
                 <div className="mt-10">
-                  <button
-                    type="submit"
-                    className="w-full rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  <div
+                    onClick={() => xacNhanDonHang(id)}
+                    className="w-full flex justify-center items-center rounded-md border border-transparent bg-indigo-600 py-3 px-4 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                   >
                     Xác nhận đơn
-                  </button>
+                  </div>
                 </div>
               </div>
             </form>

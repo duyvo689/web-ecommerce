@@ -17,13 +17,14 @@ import { useRouter } from "next/router";
 
 const navigation = [
   // { name: "Bảng điều khiển", href: "/admin", icon: HomeIcon, current: true },
-  { name: "Thêm sản phẩm", href: "/admin/add-product", icon: UsersIcon, current: false },
   {
     name: "Quản lý đơn đặt hàng",
-    href: "/admin/list-order",
+    href: "/admin",
     icon: FolderIcon,
     current: false,
   },
+  { name: "Thêm sản phẩm", href: "/admin/add-product", icon: UsersIcon, current: false },
+
   {
     name: "Thêm danh mục sản phẩm",
     href: "/admin/add-category",
@@ -139,7 +140,10 @@ export default function NavbarAdmin() {
         </Transition.Root>
 
         {/* Static sidebar for desktop */}
-        <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
+        <div
+          className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col "
+          style={{ zIndex: "1000" }}
+        >
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex min-h-0 flex-1 flex-col bg-gray-800">
             <div className="flex h-16 flex-shrink-0 items-center bg-gray-900 px-4">

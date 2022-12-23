@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
 import { productsInterface } from "../values/interfaces";
 import axios from "axios";
+import { cartAction } from "../redux/actions/ReduxAction";
 
 const fieldsOfForm: any = {
   name: "Vui lòng nhập tên người nhận!",
@@ -45,14 +46,14 @@ export default function CheckOut() {
   const [addressApi, setAddressApi] = useState<string>();
   const products: productsInterface[] = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
-  console.log(products);
+
   const addNewOrder = async (event: any) => {
     event.preventDefault();
     setLoad(true);
 
     const _name = event.target.elements.name.value;
     const _phone = event.target.elements.phone.value;
-    const _address = event.target.elements.address.value;
+    const _address = event.target.elements.address.value + "(" + addressApi + ")";
     const _description = event.target.elements.description.value;
     let _oderInfo = {
       name: _name,
@@ -76,6 +77,8 @@ export default function CheckOut() {
         product_id: product.id,
         order_id: orderDb.id,
         status: 1,
+        total: product.total,
+        price: product.total * product.price,
       };
       _detailOrderInfo.push(order);
     }
@@ -89,7 +92,7 @@ export default function CheckOut() {
       toast.error(err_order.message);
     } else if (orderDb) {
       toast.success(`Đặt hàng thành công`);
-      // dispatch(servicesAction("services", services));
+      dispatch(cartAction("cart", []));
       router.push("/stores");
     }
   };
