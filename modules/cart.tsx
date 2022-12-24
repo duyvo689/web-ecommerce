@@ -7,6 +7,7 @@ import { RootState } from "../redux/reducers";
 import { productsInterface } from "../values/interfaces";
 import NextLink from "next/link";
 import toast from "react-hot-toast";
+import { converToMoney } from "../utils/funtions";
 
 export default function Cart() {
   const products: productsInterface[] = useSelector((state: RootState) => state.cart);
@@ -20,7 +21,8 @@ export default function Cart() {
   const totalPrice = (pros: any) => {
     let total = 0;
     total = pros.reduce(
-      (accumulator: any, currentValue: any) => accumulator + currentValue.price,
+      (accumulator: any, currentValue: any) =>
+        accumulator + currentValue.price * currentValue.total,
       0
     );
     return total;
@@ -58,7 +60,7 @@ export default function Cart() {
                             </a>
                           </h4>
                           <p className="ml-4 text-sm font-medium text-gray-900">
-                            {product.price}
+                            {converToMoney(product.price * product.total)} VNĐ
                           </p>
                         </div>
                       </div>
@@ -104,7 +106,7 @@ export default function Cart() {
                 <div className="flex items-center justify-between">
                   <dt className="text-base font-medium text-gray-900">Tổng giá tiền:</dt>
                   <dd className="ml-4 text-base font-medium text-gray-900">
-                    {totalPrice(products)}
+                    {converToMoney(totalPrice(products))} VNĐ
                   </dd>
                 </div>
               </dl>

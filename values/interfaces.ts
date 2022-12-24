@@ -35,3 +35,13 @@ price: number
 }
 
 
+export interface userInterface {
+     id: string
+    name: string
+email: string
+avatar: string
+phone: string
+password: string
+    created_at:Date
+}
+

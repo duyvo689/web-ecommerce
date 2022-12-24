@@ -50,7 +50,7 @@ export default function HomeTrendingProduct() {
               {trendingProducts &&
                 trendingProducts.length > 0 &&
                 trendingProducts.map((product, index) => (
-                  <NextLink href={`/product-detail/${product.id}`} passHref>
+                  <NextLink key={index} href={`/product-detail/${product.id}`} passHref>
                     <li
                       key={index}
                       className="inline-flex w-64 flex-col text-center lg:w-auto"

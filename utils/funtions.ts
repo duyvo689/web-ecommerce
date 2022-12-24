@@ -24,3 +24,20 @@ export const converToMoney = (num:any) => {
     return nf.format(num)
   }
 }
+
+export const getInfoUser = () => {
+    var userLocal: any = typeof window !== "undefined" ? localStorage.getItem("user") : "";
+  var user = userLocal ? JSON.parse(userLocal) : null;
+ return user;
+}
+
+export const checkInfoUser = () => {
+    var userLocal: any = typeof window !== "undefined" ? localStorage.getItem("user") : "";
+  var user = userLocal ? JSON.parse(userLocal) : null;
+  if (user) {
+   return true;
+  } else {
+    return false;
+ }
+}
+

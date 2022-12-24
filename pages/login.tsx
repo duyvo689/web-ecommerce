@@ -3,74 +3,75 @@ import NextLink from "next/link";
 import router from "next/router";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { supabase } from "../configs/supabase-client";
+import { userAction } from "../redux/actions/ReduxAction";
 
 export default function Login() {
   const [load, setLoad] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const signUpWithEmail = async (event: any) => {
+    try {
+      event.preventDefault();
+      setLoad(true);
+      const _email = event.target.elements.email.value;
+      const _name = event.target.elements.name.value;
+      const _address = event.target.elements.address.value;
+      const _phone = event.target.elements.phone.value;
+      const _password = event.target.elements.password.value;
+      if (!_email || !_name || !_address || _phone || !_password) {
+        toast.error(`Điền đầy đủ thông tin!`);
+        return;
+      }
+      const _info = {
+        name: _name,
+        phone: _phone,
+        email: _email,
+        address: _address,
+        password: _password,
+        avatar: "https://scr.vn/wp-content/uploads/2020/07/avt-cute.jpg",
+      };
+      const { data, error } = await supabase.from("users").insert(_info).select();
+      console.log(data, error);
+      toast.success(`Đăng kí tài khoản thành công`);
+      event.target.reset();
+    } catch (error) {
+    } finally {
+      setLoad(false);
+    }
+  };
 
-  // const signup = async (event: any) => {
-  //   event.preventDefault();
-  //   setLoad(true);
-
-  //   const _name = event.target.elements.name.value;
-  //   const _phone = event.target.elements.phone.value;
-  //   const _address = event.target.elements.address.value;
-  //   const _description = event.target.elements.description.value;
-  //   let _oderInfo = {
-  //     name: _name,
-  //     phone: _phone,
-  //     address: _address,
-  //     description: _description,
-  //   };
-
-  //   // let isValid = validateForm(_oderInfo);
-  //   // if (!isValid) return;
-
-  //   const { data: orderDb, error: err_order } = await supabase
-  //     .from("orders")
-  //     .insert(_oderInfo)
-  //     .select()
-  //     .single();
-
-  //   let _detailOrderInfo = [];
-  //   for (const product of products) {
-  //     const order = {
-  //       product_id: product.id,
-  //       order_id: orderDb.id,
-  //       status: 1,
-  //     };
-  //     _detailOrderInfo.push(order);
-  //   }
-  //   console.log("_detailOrderInfo", _detailOrderInfo);
-  //   const { data: detail_order, error: err_detail } = await supabase
-  //     .from("detail_order")
-  //     .insert(_detailOrderInfo);
-  //   console.log("err_detail", err_detail);
-
-  //   if (err_order != null && err_detail != null) {
-  //     toast.error(err_order.message);
-  //   } else if (orderDb) {
-  //     toast.success(`Đặt hàng thành công`);
-  //     // dispatch(servicesAction("services", services));
-  //     router.push("/stores");
-  //   }
-  // };
-
-  // Check validate
-  // function validateForm(form: any) {
-  //   let fields = ["name", "phone", "address"];
-  //   let i,
-  //     l = fields.length;
-  //   let fieldname;
-  //   for (i = 0; i < l; i++) {
-  //     fieldname = fields[i];
-  //     if (!form[fieldname]) {
-  //       toast.error(`Thiếu thông tin ${fieldsOfForm[fieldname]}`);
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
+  const signInWithEmail = async (event: any) => {
+    try {
+      event.preventDefault();
+      setLoad(true);
+      const email = event.target.elements.email.value;
+      const password = event.target.elements.password.value;
+      if (!email) return;
+      if (!password) return;
+      const { data, error } = await supabase.from("users").select("*").single();
+      console.log(data, error);
+      if (data) {
+        if (email == data.email) {
+          if (password == data.password) {
+            toast.success(`Đăng nhập thành công`);
+            localStorage.setItem("user", JSON.stringify(data));
+            dispatch(userAction("user", data));
+            router.push("/");
+          } else {
+            toast.error(`Sai mật khẩu!`);
+          }
+        } else {
+          toast.error(`Sai email!`);
+        }
+      } else {
+        toast.error(`Không có tài khoản!`);
+      }
+    } catch (error) {
+    } finally {
+      setLoad(false);
+    }
+  };
 
   return (
     <div className="flex justify-around">
@@ -198,6 +199,7 @@ export default function Login() {
                           Đăng nhập
                         </h3>
                         <form
+                          onSubmit={signInWithEmail}
                           action="#"
                           method="POST"
                           className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8 min-w-[500px]"
@@ -207,12 +209,12 @@ export default function Login() {
                               htmlFor="subject"
                               className="block text-sm font-medium text-warm-gray-900"
                             >
-                              Họ và Tên
+                              Email
                             </label>
                             <div className="mt-1">
                               <input
                                 type="text"
-                                name="subject"
+                                name="email"
                                 id="subject"
                                 className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-teal-500 focus:ring-teal-500"
                               />
@@ -228,18 +230,23 @@ export default function Login() {
                             <div className="mt-1">
                               <input
                                 type="password"
-                                name="subject"
+                                name="password"
                                 id="subject"
                                 className="block w-full rounded-md border-warm-gray-300 py-3 px-4 text-warm-gray-900 shadow-sm focus:border-teal-500 focus:ring-teal-500"
                               />
                             </div>
                           </div>
-                          <div className="sm:col-span-2 sm:flex sm:justify-end">
+                          <div className="sm:col-span-2 sm:flex sm:justify-end flex gap-4">
+                            <NextLink href={"/"} passHref>
+                              <div className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-gray-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
+                                Về Trang Chủ
+                              </div>
+                            </NextLink>
                             <button
                               type="submit"
                               className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-teal-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto"
                             >
-                              Đăng Nhập
+                              {load ? "Đang Đăng Nhập..." : "Đăng Nhập"}
                             </button>
                           </div>
                         </form>
@@ -374,6 +381,7 @@ export default function Login() {
                           Nhập đầy đủ thông tin để tạo tài khoản
                         </h3>
                         <form
+                          onSubmit={signUpWithEmail}
                           action="#"
                           method="POST"
                           className="mt-6 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8"
@@ -463,12 +471,17 @@ export default function Login() {
                               />
                             </div>
                           </div>
-                          <div className="sm:col-span-2 sm:flex sm:justify-end">
+                          <div className="sm:col-span-2 sm:flex sm:justify-end flex gap-4">
+                            <NextLink href={"/"} passHref>
+                              <div className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-gray-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto">
+                                Về Trang Chủ
+                              </div>
+                            </NextLink>
                             <button
                               type="submit"
                               className="mt-2 inline-flex w-full items-center justify-center rounded-md border border-transparent bg-teal-500 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 sm:w-auto"
                             >
-                              Đăng Kí
+                              {load ? "Đang Đăng Kí..." : "Đăng Kí"}
                             </button>
                           </div>
                         </form>
@@ -481,11 +494,6 @@ export default function Login() {
           </div>
         </Tabs.Item>
       </Tabs.Group>
-      <NextLink href={"/"} passHref>
-        <div className=" h-[60px] flex items-center font-medium cursor-pointer text-gray-500">
-          Về Trang Chủ
-        </div>
-      </NextLink>
     </div>
   );
 }

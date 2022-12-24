@@ -4,6 +4,7 @@ import cartRedux from "./cartRedux";
 import productTrendRedux from "./productTrendRedux";
 import productRedux from "./productRedux";
 import orderRedux from "./orderRedux";
+import userRedux from "./userRedux";
 
 const rootReducer = combineReducers({
   category: categoryRedux,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   products: productRedux,
   productTrend: productTrendRedux,
   orders: orderRedux,
+  user: userRedux
 });
 export type RootState = ReturnType<typeof rootReducer>;
 

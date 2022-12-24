@@ -2,9 +2,10 @@ import { Fragment } from "react";
 import { Popover, Transition } from "@headlessui/react";
 import { MagnifyingGlassIcon, ShoppingBagIcon } from "@heroicons/react/24/outline";
 import NextLink from "next/link";
-import { productsInterface } from "../values/interfaces";
+import { productsInterface, userInterface } from "../values/interfaces";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/reducers";
+import { Dropdown } from "flowbite-react";
 
 const navigation = {
   other: [
@@ -23,6 +24,9 @@ export default function HeaderNavbar() {
   const productInCart: productsInterface[] = useSelector(
     (state: RootState) => state.cart
   );
+
+  var userLocal: any = typeof window !== "undefined" ? localStorage.getItem("user") : "";
+  var user = userLocal ? JSON.parse(userLocal) : null;
   return (
     <div className="bg-white z-50">
       <header className="relative bg-white">
@@ -58,31 +62,65 @@ export default function HeaderNavbar() {
               </Popover.Group>
 
               <div className="flex flex-1 items-center justify-end">
-                {/* Search */}
-                <a href="/" className="p-2 text-gray-400 hover:text-gray-500">
-                  <span className="sr-only">Search</span>
-                  <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
-                </a>
-
-                {/* Cart */}
-                <div className="ml-4 flow-root lg:ml-8">
-                  <NextLink href="/cart" className="group -m-2 flex items-center p-2">
-                    <ShoppingBagIcon
-                      className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                      aria-hidden="true"
-                    />
-                    {productInCart.length == 0 ? (
-                      <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
-                        0
+                {/* <NextLink href={"/"} passHref></NextLink> */}
+                <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+                  <div className="mr-6 flow-root lg:ml-8">
+                    <NextLink href="/cart" className="group -m-2 flex items-center p-2">
+                      <ShoppingBagIcon
+                        className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
+                        aria-hidden="true"
+                      />
+                      {productInCart.length == 0 ? (
+                        <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                          0
+                        </span>
+                      ) : (
+                        <span className="p-1 w-6 h-6 text-black items-center flex justify-center rounded-full bg-red-500 ml-2 text-sm font-medium  group-hover:text-white">
+                          {productInCart.length}
+                        </span>
+                      )}
+                      <span className="sr-only">items in cart, view bag</span>
+                    </NextLink>
+                  </div>
+                  {user ? (
+                    <>
+                      <Dropdown label={user.name}>
+                        <Dropdown.Header>
+                          <NextLink href="/user">
+                            <div className="flex gap-2 items-center">
+                              <img src={user.avatar} className="w-10 h-10" />
+                              <span>
+                                <span className="block text-sm"> {user.name}</span>
+                                <span className="block text-sm font-medium truncate">
+                                  {user.email}
+                                </span>
+                              </span>
+                            </div>
+                          </NextLink>
+                        </Dropdown.Header>
+                        <Dropdown.Divider />
+                        <Dropdown.Item>
+                          {" "}
+                          <a
+                            onClick={() => {
+                              localStorage.removeItem("user");
+                            }}
+                            href="/"
+                          >
+                            Đăng Xuất
+                          </a>
+                        </Dropdown.Item>
+                      </Dropdown>
+                    </>
+                  ) : (
+                    <NextLink href={"/login"} passHref>
+                      <span className="ml-8 inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700">
+                        Đăng Nhập
                       </span>
-                    ) : (
-                      <span className="p-1 w-6 h-6 text-black items-center flex justify-center rounded-full bg-red-500 ml-2 text-sm font-medium  group-hover:text-white">
-                        {productInCart.length}
-                      </span>
-                    )}
-                    <span className="sr-only">items in cart, view bag</span>
-                  </NextLink>
+                    </NextLink>
+                  )}
                 </div>
+                {/* Cart */}
               </div>
             </div>
           </div>

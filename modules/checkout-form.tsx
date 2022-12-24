@@ -10,6 +10,7 @@ import { RootState } from "../redux/reducers";
 import { productsInterface } from "../values/interfaces";
 import axios from "axios";
 import { cartAction } from "../redux/actions/ReduxAction";
+import { getInfoUser } from "../utils/funtions";
 
 const fieldsOfForm: any = {
   name: "Vui lòng nhập tên người nhận!",
@@ -46,6 +47,7 @@ export default function CheckOut() {
   const [addressApi, setAddressApi] = useState<string>();
   const products: productsInterface[] = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
+  const user = getInfoUser();
 
   const addNewOrder = async (event: any) => {
     event.preventDefault();
@@ -76,9 +78,9 @@ export default function CheckOut() {
       const order = {
         product_id: product.id,
         order_id: orderDb.id,
-        status: 1,
         total: product.total,
         price: product.total * product.price,
+        user_id: user.id,
       };
       _detailOrderInfo.push(order);
     }
@@ -86,8 +88,8 @@ export default function CheckOut() {
     const { data: detail_order, error: err_detail } = await supabase
       .from("detail_order")
       .insert(_detailOrderInfo);
-    console.log("err_detail", err_detail);
 
+    console.log(detail_order, err_detail);
     if (err_order != null && err_detail != null) {
       toast.error(err_order.message);
     } else if (orderDb) {
