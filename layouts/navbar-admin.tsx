@@ -35,7 +35,7 @@ const navigation = [
 const userNavigation = [
   { name: "Your Profile", href: "#" },
   { name: "Settings", href: "#" },
-  { name: "Sign out", href: "#" },
+  { name: "Sign out", href: "/" },
 ];
 
 function classNames(...classes: any) {
@@ -248,6 +248,9 @@ export default function NavbarAdmin() {
                         <Menu.Item key={item.name}>
                           {({ active }) => (
                             <a
+                              onClick={() => {
+                                localStorage.removeItem("token");
+                              }}
                               href={item.href}
                               className={classNames(
                                 active ? "bg-gray-100" : "",
