@@ -8,6 +8,7 @@ import { orderInterface } from "../../values/interfaces";
 import { RootState } from "../../redux/reducers";
 import moment from "moment";
 import Link from "next/link";
+import router from "next/router";
 
 const people = [
   {
@@ -26,7 +27,12 @@ function classNames(...classes: any) {
 export default function ListOrder() {
   const dispatch = useDispatch();
   const orderList: orderInterface[] = useSelector((state: RootState) => state.orders);
-
+  var token: any = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  useEffect(() => {
+    if (!token) {
+      router.push("/admin/login");
+    }
+  }, [token]);
   const getListOrderAsync = async () => {
     try {
       let { data: orders, error } = await supabase
