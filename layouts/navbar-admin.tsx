@@ -33,9 +33,8 @@ const navigation = [
   },
 ];
 const userNavigation = [
-  { name: "Your Profile", href: "#" },
-  { name: "Settings", href: "#" },
-  { name: "Sign out", href: "/" },
+  { name: "Cài đặt", href: "#" },
+  { name: "Đăng xuất", href: "/" },
 ];
 
 function classNames(...classes: any) {
@@ -206,7 +205,7 @@ export default function NavbarAdmin() {
                     <input
                       id="search-field"
                       className="block h-full w-full border-transparent py-2 pl-8 pr-3 text-gray-900 placeholder-gray-500 focus:border-transparent focus:placeholder-gray-400 focus:outline-none focus:ring-0 sm:text-sm"
-                      placeholder="Search"
+                      placeholder="Tìm kiếm"
                       type="search"
                       name="search"
                     />
