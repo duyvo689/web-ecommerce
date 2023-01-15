@@ -97,7 +97,7 @@ export default function Footer() {
           ))}
         </div>
         <p className="mt-8 text-center text-base text-gray-400">
-          &copy; 2022 Công ty sản xuất bao bì tái chế DUYDUY
+          &copy; 2022 Công ty sản xuất bao bì tái chế PaperGreen
         </p>
       </div>
     </footer>

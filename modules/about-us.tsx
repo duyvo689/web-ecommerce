@@ -21,7 +21,7 @@ const supportLinks = [
     name: "Nhà máy sản xuất",
     href: "#",
     description:
-      "GIỚI THIỆU NHÀ MÁY Tọa lạc trên diện tích 10.000 mét vuông, diện tích nhà xưởng xây dựng đạt 6.000 mét vuông với hai dây chuyền sản xuất hiện đại. Hiện tại, nhà máy Sản Xuất Bao Bì DuyDuy có hơn 250 công nhân viên, bao gồm khoảng 200 công nhân sản xuất và bảo trì (bao gồm cả tổ trưởng), 30 kỹ sư phụ trách sản.",
+      "GIỚI THIỆU NHÀ MÁY Tọa lạc trên diện tích 10.000 mét vuông, diện tích nhà xưởng xây dựng đạt 6.000 mét vuông với hai dây chuyền sản xuất hiện đại. Hiện tại, nhà máy Sản Xuất Bao Bì PaperGreen có hơn 250 công nhân viên, bao gồm khoảng 200 công nhân sản xuất và bảo trì (bao gồm cả tổ trưởng), 30 kỹ sư phụ trách sản.",
     icon: NewspaperIcon,
   },
 ];
@@ -44,10 +44,10 @@ export default function AboutUs() {
         </div>
         <div className="relative mx-auto max-w-7xl py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
           <h1 className="text-4xl font-bold tracking-tight text-white md:text-5xl lg:text-6xl">
-            Công Ty Cổ Phần Sản Xuất Bao Bì Giấy DuyDuy
+            Công Ty Cổ Phần Sản Xuất Bao Bì Giấy PaperGreen
           </h1>
           <p className="mt-6 max-w-3xl text-xl text-gray-300">
-            Thành lập từ năm 2020, Công Ty Cổ Phần Sản Xuất Bao Bì Giấy DuyDuy là một
+            Thành lập từ năm 2020, Công Ty Cổ Phần Sản Xuất Bao Bì Giấy PaperGreen là một
             trong những công ty hàng đầu tại Tp. HCM trong lĩnh vực bán lẻ và phân phối
             các sản phẩm về giấy tái chế bảo vệ môi trường số một tại thành phố HCM p.
           </p>

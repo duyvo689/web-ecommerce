@@ -285,9 +285,9 @@ export default function Contact() {
                   </div>
                   <h3 className="text-lg font-medium text-white">Thông tin liên hệ</h3>
                   <p className="mt-6 max-w-3xl text-base text-teal-50">
-                    Công ty Cổ phần bao bì giấy DuyDuy là một đội ngũ chuyên nghiệp, đồng
-                    lòng và tận tụy trong việc cung cấp các sản phẩm bằng giấy cho khách
-                    hàng.
+                    Công ty Cổ phần bao bì giấy PaperGreen là một đội ngũ chuyên nghiệp,
+                    đồng lòng và tận tụy trong việc cung cấp các sản phẩm bằng giấy cho
+                    khách hàng.
                   </p>
                   <dl className="mt-8 space-y-6">
                     <dt>
